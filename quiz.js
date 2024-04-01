@@ -74,8 +74,8 @@ let questionIndex = 0;
 let correctCount = 0;
 // インターバルID
 let intervalId = null;
-// 解答中の経過時間
-let elapsedTime = 0;
+// 解答の開始時間
+let startTime = null;
 
 /* ============================================================
   要素一覧
@@ -249,8 +249,6 @@ function resetQuiz() {
   correctCount = 0;
   // インターバルIDをリセットする
   intervalId = null;
-  // 解答中の経過時間をリセットする
-  elapsedTime = 0;
 
   // 選択肢ボタンを有効化する
   setOptionButtons(true);
@@ -277,18 +275,21 @@ function setResult() {
  * 解答の計測を開始する
  */
 function startProgress() {
+  // 解答の開始時間を取得する
+  startTime = Date.now();
   // インターバルを開始する
   intervalId = setInterval(() => {
+    // 現在の時間(タイムスタンプ)を取得する
+    const currentTime = Date.now();
     // 経過時間を計算する
-    const progress = (elapsedTime / ANSWER_TIME_MS) * 100;
+    const progress = ((currentTime - startTime) / ANSWER_TIME_MS) * 100;
     // 経過時間を表示する
     questionProgress.value = progress;
-    if (ANSWER_TIME_MS <= elapsedTime) {
+    if (startTime + ANSWER_TIME_MS <= currentTime) {
       stopProgress();
       questionTimeOver();
       return;
     }
-    elapsedTime += INTERVAL_TIME_MS;
   }, INTERVAL_TIME_MS);
 }
 
@@ -398,8 +399,6 @@ function clickNextButton() {
     setOptionButtons(true);
     // インターバルIDをリセットする
     intervalId = null;
-    // 解答時間をリセットする
-    elapsedTime = 0;
     // 正解・不正解のダイアログを閉じる
     dialog.close();
     // 解答の計測を開始する
