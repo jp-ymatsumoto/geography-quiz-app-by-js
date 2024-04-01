@@ -99,3 +99,13 @@
 dialog::backdrop {
   background-color: rgba(0, 0, 0, 0.7);
 }
+
+/* プログレスバー */
+.progress {
+  width: 100%;
+  height: 10px;
+  -webkit-appearance: none;
+}
+::-webkit-progress-value {
+  background-color: orange;
+}

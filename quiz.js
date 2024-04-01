@@ -61,6 +61,10 @@ const data = [
 
 /** 出題する問題数 */
 const QUESTION_LENGTH = 5;
+// 解答時間(ms)
+const ANSWER_TIME_MS = 10000;
+// インターバルの時間(ms)
+const INTERVAL_TIME_MS = 10;
 
 /** 出題する問題 */
 let questions = [];
@@ -68,6 +72,10 @@ let questions = [];
 let questionIndex = 0;
 /** 正解数 */
 let correctCount = 0;
+// インターバルID
+let intervalId = null;
+// 解答中の経過時間
+let elapsedTime = 0;
 
 /* ============================================================
   要素一覧
@@ -89,6 +97,8 @@ const questionNumber = document.getElementById("questionNumber");
 const questionText = document.getElementById("questionText");
 /** すべての選択肢のbutton要素 */
 const optionButtons = document.querySelectorAll("#questionPage button");
+// 問題の進行状況のprogress要素
+const questionProgress = document.getElementById("questionProgress");
 
 /** 正解・不正解のダイアログのdialog要素 */
 const dialog = document.getElementById("dialog");
@@ -237,6 +247,10 @@ function resetQuiz() {
   questionIndex = 0;
   // 正解数をリセットする
   correctCount = 0;
+  // インターバルIDをリセットする
+  intervalId = null;
+  // 解答中の経過時間をリセットする
+  elapsedTime = 0;
 
   // 選択肢ボタンを有効化する
   setOptionButtons(true);
@@ -260,6 +274,54 @@ function setResult() {
 }
 
 /**
+ * 解答の計測を開始する
+ */
+function startProgress() {
+  // インターバルを開始する
+  intervalId = setInterval(() => {
+    // 経過時間を計算する
+    const progress = (elapsedTime / ANSWER_TIME_MS) * 100;
+    // 経過時間を表示する
+    questionProgress.value = progress;
+    if (ANSWER_TIME_MS <= elapsedTime) {
+      stopProgress();
+      questionTimeOver();
+      return;
+    }
+    elapsedTime += INTERVAL_TIME_MS;
+  }, INTERVAL_TIME_MS);
+}
+
+/**
+ * 解答の計測を停止する
+ */
+function stopProgress() {
+  if (intervalId !== null) {
+    // インターバルを停止する
+    clearInterval(intervalId);
+    intervalId = null;
+  }
+}
+
+/**
+ * 解答時間をオーバーした時の処理
+ */
+function questionTimeOver() {
+  // 時間切れの場合は不正解とする
+  questionResult.innerText = "✖️";
+
+  // 最後の問題かどうかを判定する
+  if (isLastQuestion()) {
+    nextButton.innerText = "結果を見る";
+  } else {
+    nextButton.innerText = "次の問題へ";
+  }
+
+  // 正解・不正解のダイアログを表示する
+  dialog.showModal();
+}
+
+/**
  * クイズを開始するイベントハンドラー
  */
 function clickStartButton() {
@@ -267,6 +329,8 @@ function clickStartButton() {
   resetQuiz();
   // 問題を設定する
   setQuestion();
+  // 解答の計測を開始する
+  startProgress();
   // スタート画面を非表示にする
   switchStartPage(false);
   // 結果画面を非表示にする
@@ -280,6 +344,8 @@ function clickStartButton() {
  * @param {object} event イベントオブジェクト
  */
 function clickOptionButton(event) {
+  // 解答の計測を停止する
+  stopProgress();
   // すべての選択肢ボタンを無効化する
   setOptionButtons(false);
 
@@ -330,8 +396,14 @@ function clickNextButton() {
     setQuestion();
     // 選択肢ボタンを有効化する
     setOptionButtons(true);
+    // インターバルIDをリセットする
+    intervalId = null;
+    // 解答時間をリセットする
+    elapsedTime = 0;
     // 正解・不正解のダイアログを閉じる
     dialog.close();
+    // 解答の計測を開始する
+    startProgress();
   }
 }
 
