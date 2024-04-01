@@ -8,7 +8,57 @@
     <link rel="stylesheet" href="quiz.css" />
   </head>
   <body>
-    <h1>地理クイズアプリ</h1>
+    <div class="container">
+      <!-- スタート画面 -->
+      <div id="startPage" class="page w-md gap-lg">
+        <div class="flex-col">
+          <h1 class="text-lg">地理クイズアプリ</h1>
+          <div class="text-md">地理がテーマの４択クイズアプリです。</div>
+        </div>
+        <div class="flex-col">
+          <button type="button" id="startButton" class="button text-md">
+            プレイする
+          </button>
+        </div>
+      </div>
+
+      <!-- クイズの問題画面 -->
+      <div id="questionPage" class="page w-lg gap-lg hidden">
+        <div class="flex-col text-lg">
+          <h2 id="questionNumber">第 1 問</h2>
+          <div id="questionText">問題文</div>
+        </div>
+        <div class="grid-col-2">
+          <button type="button" class="button text-lg">選択肢1</button>
+          <button type="button" class="button text-lg">選択肢2</button>
+          <button type="button" class="button text-lg">選択肢3</button>
+          <button type="button" class="button text-lg">選択肢4</button>
+        </div>
+      </div>
+
+      <!-- 正解・不正解のダイアログ -->
+      <dialog id="dialog" class="w-sm">
+        <div class="flex-col gap-sm">
+          <div id="questionResult" class="text-64">⭕️✖️</div>
+          <button type="button" id="nextButton" class="button text-md">
+            次の問題へ
+          </button>
+        </div>
+      </dialog>
+
+      <!-- クイズの結果画面 -->
+      <div id="resultPage" class="page w-md gap-lg hidden">
+        <div class="flex-col text-lg">
+          <h2>クイズ結果</h2>
+          <div id="resultMessage">正解率 50%</div>
+        </div>
+        <div class="flex-col">
+          <button type="button" id="backButton" class="button text-md">
+            スタート画面に戻る
+          </button>
+        </div>
+      </div>
+    </div>
 
     <script type="module" src="quiz.js"></script>
   </body>
