@@ -252,6 +252,8 @@ function resetQuiz() {
 
   // 選択肢ボタンを有効化する
   setOptionButtons(true);
+  // 選択肢のアクティブを解除する
+  removeActiveOption();
 }
 
 /**
@@ -323,6 +325,18 @@ function questionTimeOver() {
 }
 
 /**
+ * 選択肢のボタンのアクティブを解除する
+ */
+function removeActiveOption() {
+  // すべての選択肢ボタンからアクティブクラスを削除する
+  optionButtons.forEach((button) => {
+    if (button.classList.contains("active")) {
+      button.classList.remove("active");
+    }
+  });
+}
+
+/**
  * クイズを開始するイベントハンドラー
  */
 function clickStartButton() {
@@ -349,6 +363,10 @@ function clickOptionButton(event) {
   stopProgress();
   // すべての選択肢ボタンを無効化する
   setOptionButtons(false);
+
+  if (!event.target.classList.contains("active")) {
+    event.target.classList.add("active");
+  }
 
   // 選択肢のテキストを取得する
   const optionText = event.target.innerText;
@@ -397,6 +415,8 @@ function clickNextButton() {
     setQuestion();
     // 選択肢ボタンを有効化する
     setOptionButtons(true);
+    // 選択肢のアクティブを解除する
+    removeActiveOption();
     // インターバルIDをリセットする
     intervalId = null;
     // 正解・不正解のダイアログを閉じる
