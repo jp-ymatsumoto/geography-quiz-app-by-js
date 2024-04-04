@@ -160,13 +160,9 @@ function getRandomQuestions() {
  */
 function switchStartPage(isShow) {
   if (isShow) {
-    if (startPage.classList.contains("hidden")) {
-      startPage.classList.remove("hidden");
-    }
+    startPage.classList.remove("hidden");
   } else {
-    if (!startPage.classList.contains("hidden")) {
-      startPage.classList.add("hidden");
-    }
+    startPage.classList.add("hidden");
   }
 }
 
@@ -176,13 +172,9 @@ function switchStartPage(isShow) {
  */
 function switchQuestionPage(isShow) {
   if (isShow) {
-    if (questionPage.classList.contains("hidden")) {
-      questionPage.classList.remove("hidden");
-    }
+    questionPage.classList.remove("hidden");
   } else {
-    if (!questionPage.classList.contains("hidden")) {
-      questionPage.classList.add("hidden");
-    }
+    questionPage.classList.add("hidden");
   }
 }
 
@@ -192,13 +184,9 @@ function switchQuestionPage(isShow) {
  */
 function switchResultPage(isShow) {
   if (isShow) {
-    if (resultPage.classList.contains("hidden")) {
-      resultPage.classList.remove("hidden");
-    }
+    resultPage.classList.remove("hidden");
   } else {
-    if (!resultPage.classList.contains("hidden")) {
-      resultPage.classList.add("hidden");
-    }
+    resultPage.classList.add("hidden");
   }
 }
 
@@ -209,15 +197,11 @@ function switchResultPage(isShow) {
 function setOptionButtons(isEnabled = true) {
   if (isEnabled) {
     optionButtons.forEach((button) => {
-      if (button.hasAttribute("disabled")) {
-        button.removeAttribute("disabled");
-      }
+      button.removeAttribute("disabled");
     });
   } else {
     optionButtons.forEach((button) => {
-      if (!button.hasAttribute("disabled")) {
-        button.setAttribute("disabled", "disabled");
-      }
+      button.setAttribute("disabled", "disabled");
     });
   }
 }
@@ -330,11 +314,13 @@ function questionTimeOver() {
 function removeActiveOption() {
   // すべての選択肢ボタンからアクティブクラスを削除する
   optionButtons.forEach((button) => {
-    if (button.classList.contains("active")) {
-      button.classList.remove("active");
-    }
+    button.classList.remove("active");
   });
 }
+
+/* ============================================================
+  イベント関連の関数一覧
+============================================================ */
 
 /**
  * クイズを開始するイベントハンドラー
@@ -364,9 +350,7 @@ function clickOptionButton(event) {
   // すべての選択肢ボタンを無効化する
   setOptionButtons(false);
 
-  if (!event.target.classList.contains("active")) {
-    event.target.classList.add("active");
-  }
+  event.target.classList.add("active");
 
   // 選択肢のテキストを取得する
   const optionText = event.target.innerText;
